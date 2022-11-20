@@ -11,7 +11,7 @@ or (emission per capita) a country emitted for a given year.
 
 
 
-<img src="https://github.com/thomaslui003/Quick-fix/raw/main/layout1.png" width="807" height="524">
+<img src="https://github.com/thomaslui003/Global-CO2-Emissions-DataVisualization/raw/main/dataMapping.jpg" width="807" height="524">
 <img src="https://github.com/thomaslui003/Quick-fix/raw/main/layout2.png" width="853" height="476">
 
 
