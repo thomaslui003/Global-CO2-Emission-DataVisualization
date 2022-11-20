@@ -64,7 +64,7 @@ function drawPie(data, currentYear) {
       .attr("d", path);
 
   pie.select(".pie-title")
-      .text("Total global emissions grouped by continent and region, " + currentYear);
+      .text("Total Global Emissions grouped by continent and region, " + currentYear);
 }
 
 
