@@ -1,4 +1,4 @@
-# Global-CO2-Emissions-DataVisualization
+# Global-CO2-Emissions-Data Visualization
 
 This repository is to showcase the Global Carbon Dioxide Emissions Data visualization. **Click here to try it out:** [D3 Visualization](https://thomaslui003.github.io/Global-CO2-Emissions-DataVisualization/)
 
