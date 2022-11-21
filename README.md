@@ -21,4 +21,8 @@ or (emission per capita) a country emitted for a given year.
 4. Alternative option is to use the github hosted link above to view and interact with the data visualization
 
 
+### Source
 
+Dataset link: https://databank.worldbank.org/reports.aspx?source=2&series=EN.ATM.CO2E.PC&country=#
+
+The dataset is available on the dataset website The World Bank Data and is relatively detailed as it covers most countries in the world and a long period of CO2 emission data with other attributes like country populations. 
