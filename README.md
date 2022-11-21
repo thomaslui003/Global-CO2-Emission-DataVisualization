@@ -2,7 +2,7 @@
 
 This repository is to showcase the Global Carbon Dioxide Emissions Data visualization. Click here to try it out: [D3 Visualization](https://thomaslui003.github.io/Global-CO2-Emissions-DataVisualization/)
 
-<img src="https://github.com/thomaslui003/Global-CO2-Emissions-DataVisualization/raw/main/co2EmissionVis.png" width="807" height="524">
+<img src="https://github.com/thomaslui003/Global-CO2-Emissions-DataVisualization/raw/main/co2EmissionVis.png">
 
 ## Description
 
