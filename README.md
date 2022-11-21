@@ -15,10 +15,9 @@ or (emission per capita) a country emitted for a given year.
 
 ### Executing the program
 
-The application can be compiled and run using Android studio.
+1. Clone the repository on Github
+2. Open VsCode with this repository file folder
+3. The application can be compiled and run using VScode extension "Live Preview" for viewing and interaction on localhost.
 
-The software uses Android API 24 and will be compatible with systems running Android 7.0.0+
 
-
-styleguide: https://google.github.io/styleguide/javaguide.html
 
