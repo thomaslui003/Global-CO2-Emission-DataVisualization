@@ -5,7 +5,7 @@ This repository is to showcase the Global Carbon Dioxide Emissions Data visualiz
 <img src="https://github.com/thomaslui003/Global-CO2-Emissions-DataVisualization/raw/main/co2EmissionVis.png">
 
 ## Description
-  #### Data Mapping
+  ### Data Mapping
 
 <img src="https://github.com/thomaslui003/Global-CO2-Emissions-DataVisualization/raw/main/dataMapping.jpg" width="807" height="524">
 
