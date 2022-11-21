@@ -16,8 +16,8 @@ or (emission per capita) a country emitted for a given year.
 ### Executing the program
 
 1. Clone the repository on Github
-2. Open VsCode with this repository file folder
-3. The application can be compiled and run using VScode extension "Live Preview" for viewing and interaction on localhost.
+2. Open VsCode with the repository file folder
+3. Then, the application can be compiled and run using VScode extension "Live Preview" for viewing and interaction on localhost
 
 
 
