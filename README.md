@@ -4,7 +4,7 @@ This repository is to showcase the Global Carbon Dioxide Emissions Data visualiz
 
 <img src="https://github.com/thomaslui003/Global-CO2-Emissions-DataVisualization/raw/main/co2EmissionVis.png">
 
-###Interaction
+### Interaction
 User can select a country in the world map to see the country's yearly CO2 emissions trend. And, the range slider in the dashboard can be used to explore a specific year's world CO2 emissions distribution indicated with the light yellow to red colour encoding. Moreover, user can hover over each section of a graph/map to see more detailed informations such as country, year, population, percentage ratio to world total, and emissions about the hovered/selected country.  
 
 ## Description
