@@ -18,29 +18,32 @@ d3.queue()
 
     var extremeYears = d3.extent(data, d => d.year);
     var currentYear = extremeYears[0]; //set initial year to 1990
-    //console.log("the current year is "+ extremeYears[1]);
-    //var currentpopulation = d3.Population
     var currentpopulation = 0;
-    
     var currentDataType = d3.select('input[name="data-type"]:checked')
                             .attr("value");
-    //console.log("the current datatype is "+ currentDataType);     is emission           
+    //console.log("the current datatype is "+ currentDataType);     is emission   
+    //convert from TopoJSON data into GeoJSON features, which represent the countries         
     var geoData = topojson.feature(mapData, mapData.objects.countries).features; //for the geodata of the map can be access
 
+    //getting the map container width to set the map width
+    var mapWidth = +d3.select(".map-container")
+                    .node().offsetWidth;
+
     //setting the height and width for the sizing of both the bar and pie chart
-    var width = +d3.select(".chart-container")
+    var width = +d3.select(".charts-container")
                    .node().offsetWidth;
     var height = 300;
 
     //initial setting
-    createMap(width, width * 4 / 5);
+    createMap(geoData,mapWidth, mapWidth * 4 / 5);
+    // console.log("the width is this:",width)
     createPie(width, height);
     createBar(width, height);
     drawMap(geoData, data, currentYear, currentDataType);
     drawPie(data, currentYear);
     drawBar(data, currentDataType, "");
 
-
+  
     d3.select("#year")
         .property("min", currentYear)
         .property("max", extremeYears[1])
@@ -72,40 +75,6 @@ d3.queue()
     
     d3.selectAll("svg")
         .on("mousemove touchmove", updateTooltip);
-
-    // var svg = d3.selectAll("#map").append("svg");
-
-    // var g = svg.append('map');
-
-    // svg.append("path")
-    //     .call(d3.zoom()
-    //             .scaleExtent([1/2,4])
-    //             .on("zoom", zoomed));
-    
-    // function zoomed(){
-    //   g.attr("transfrom",d3.event.transform);
-    // }
-
-
-    // const svgg = d3.selectAll("#map");
-
-    // const g = svgg.append("map");
-    // svgg.call(d3.zoom().on('zoom', zoomed));
-
-    // function zoomed(){
-    //   g.attr("transform",d3.event.transform);
-    // }
-
-    //const svg = d3.select("#map");
-
-    // d3.select("#map")
-    //   .append("svg")
-    //   .call(zoom)
-        
-    // svg = select ('svg');
-    // svg.call(zoom().on('zoom', ()=> {
-    //   console.log("zoom");
-    // }))
 
     function updateTooltip() {
       var tooltip = d3.select(".tooltip");
@@ -146,6 +115,8 @@ d3.queue()
             `)
       }
     }
+
+
   });
 
 function formatDataType(key) {

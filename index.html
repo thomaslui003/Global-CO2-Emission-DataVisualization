@@ -6,35 +6,50 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
+<header style="background-color: #2d2c2c; padding: 10px; text-align: center; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+  <h1 style="font-family: 'Source Sans Pro', sans-serif; margin: 0; font-size: 2.3rem; color: #ffffff;">
+    Global CO₂ Emissions Dashboard
+  </h1>
+</header>
 &nbsp
 <body>
-  
-  <section class="container">
-    <div class="chart-container">
-    <svg
-      version="1.1"
-      baseProfile="full"
-      xmlns="http://www.w3.org/2000/svg"
-      id="map">
-    </svg>
+
+   <!-- Main Container -->
+  <div class="container">
+    <!-- Left Side Map Container -->
+    <div class="map-container">
+      <svg
+        version="1.1"
+        baseProfile="full"
+        xmlns="http://www.w3.org/2000/svg"
+        id="map">
+      </svg>
+      
+    </div>
+
+    <!-- Right Side Container (bar & Pie chart) -->
+    <div class="charts-container">
+      <div class="chart bar-chart">
+        <svg
+        version="1.1"
+        baseProfile="full"
+        xmlns="http://www.w3.org/2000/svg"
+        id="bar">
+        </svg> 
+      </div>
+      <div class="chart pie-chart">
+        <svg
+        version="1.1"
+        baseProfile="full"
+        xmlns="http://www.w3.org/2000/svg"
+        id="pie">
+        </svg>
+      </div>   
+    </div>
   </div>
-  <div class="chart-container right">
-    <svg
-      version="1.1"
-      baseProfile="full"
-      xmlns="http://www.w3.org/2000/svg"
-      id="bar">
-    </svg> 
-    <svg
-      version="1.1"
-      baseProfile="full"
-      xmlns="http://www.w3.org/2000/svg"
-      id="pie">
-    </svg>
-     
-  </div>
-  </section>
-  <div id="nav">
+
+
+  <!-- <div id="nav">
     <p>
       Global CO<sub>2</sub> emissions exploration from the year 1990 to 2019.&nbsp &nbsp &nbsp
       Current year: <span id="year-val"></span>
@@ -49,6 +64,34 @@
       <label>Emissions Per Capita</label>
     </p>
     
+  </div> -->
+
+
+  <div class="dashboard-nav">
+    <h2 class="title">Global CO<sub>2</sub> emissions exploration from the year 1990 to 2019.</h2>
+    
+    <div class="controls-row">
+      <div class="radio-section">
+        <span class="year-label">Choose between total Emissions (kt) or Emissions per capita:</span>
+        <label class="radio-label">
+          <input type="radio" class="radio-input" name="data-type" value="emissions" checked>
+          <span>Emissions</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" class="radio-input" name="data-type" value="emissionsPerCapita">
+          <span>Per Capita</span>
+        </label>
+      </div>
+  
+      <div class="year-control">
+        <span class="year-label">Year:</span>
+        <span class="year-value" id="year-val">2000</span>
+        <input id="year" class="slider" type="range" min="1990" max="2019" value="2000" step="1"
+               oninput="document.getElementById('year-val').textContent = this.value">
+      </div>
+    </div>
+  
+    <p class="map-instruction">Select a country on the map to see its yearly trends.</p>
   </div>
   <div class="tooltip"></div>
   <script src="https://d3js.org/d3.v4.js"></script>

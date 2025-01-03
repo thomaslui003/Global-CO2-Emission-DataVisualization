@@ -1,139 +1,210 @@
+
 function createBar(width, height) {
   var bar = d3.select("#bar")
                   .attr("width", width)
                   .attr("height", height);
 
-  bar.append("g")
-      .classed("x-axis", true);
+  // Create groups for chart elements
+  bar.append("g").classed("x-axis", true);
+  bar.append("g").classed("y-axis", true);
+  bar.append("g").classed("bars-container", true);
+  
+  // Create labels
+  bar.append("text").classed("y-axis-label", true);
+  bar.append("text").classed("bar-title", true);
 
-  bar.append("g")
-      .classed("y-axis", true);
+  // Store the current data and settings
+  bar.node().__currentData = [];
+  bar.node().__currentDataType = "";
+  bar.node().__currentCountry = "";
 
-  bar.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("x", - height / 2)
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .style("font-size", "1em")
-      .classed("y-axis-label", true);
-
-  bar.append("text")
-      .attr("x", width / 2)
-      .attr("y", "1em")
-      .attr("font-size", "1.5em")
-      .style("text-anchor", "middle")
-      .classed("bar-title", true);
+  responsivefyBar(bar);
 }
 
 function highlightBars(year) {
   d3.select("#bar")
     .selectAll("rect")
-      .attr("fill", d => d.year === year ? "#cc87f5" : "#e3b6fc"); //dark/light
+    .attr("fill", d => d.year === year ? "#FE9E53" : "#FFCFA9");
 }
 
 function drawBar(data, dataType, country) {
   var bar = d3.select("#bar");
-  var padding = {
-    top: 30,
-    right: 30,
-    bottom: 30,
-    left: 110
+  
+  // Store current data and settings
+  bar.node().__currentData = data;
+  bar.node().__currentDataType = dataType;
+  bar.node().__currentCountry = country;
+  
+  updateBarChart(bar.node());
+}
+
+function updateBarChart(svgNode) {
+  const bar = d3.select(svgNode);
+  const data = svgNode.__currentData;
+  const dataType = svgNode.__currentDataType;
+  const country = svgNode.__currentCountry;
+
+  // Get current dimensions
+  const width = +bar.attr("width");
+  const height = +bar.attr("height");
+  
+  // Calculate margins based on container size with more space for larger fonts
+  const margin = {
+    top: Math.max(58, height * 0.18),    // for larger title
+    right: Math.max(43, width * 0.05),
+    bottom: Math.max(58, height * 0.18),  // for larger x-axis labels
+    left: Math.max(156, width * 0.15)     // for larger y-axis labels
   };
-  var barPadding = 1;
-  var width = +bar.attr("width");
-  var height = +bar.attr("height");
-  var countryData = data.filter(d => d.country === country)
-                        .sort((a, b) => a.year - b.year);
 
-  var xScale = d3.scaleLinear()
-                 .domain(d3.extent(data, d => d.year))
-                 .range([padding.left, width - padding.right]);
+  // Calculate actual chart dimensions
+  const chartWidth = width - margin.left - margin.right;
+  const chartHeight = height - margin.top - margin.bottom;
 
-  var yScale = d3.scaleLinear()
-                 .domain([0, d3.max(countryData, d => d[dataType])])
-                 .range([height - padding.bottom, padding.top]);
 
-  var barWidth = xScale(xScale.domain()[0] + 1) - xScale.range()[0];
+  const baseFontSize = Math.min(width, height) * 0.025;
+  const titleFontSize = baseFontSize * 2.6;
+  const axisLabelFontSize = baseFontSize * 1.7;
+  const tickFontSize = baseFontSize * 0.9;
 
-  var xAxis = d3.axisBottom(xScale)
-                .tickFormat(d3.format(".0f"));
+  // Filter and sort data
+  const countryData = data
+    .filter(d => d.country === country)
+    .sort((a, b) => a.year - b.year);
 
-  d3.select(".x-axis")
-      .attr("transform", "translate(0, " + (height - padding.bottom) + ")")
-      .call(xAxis);
+  // Create scales
+  const xScale = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.year))
+    .range([0, chartWidth])
+    .nice();
 
-  var yAxis = d3.axisLeft(yScale);
+  const yScale = d3.scaleLinear()
+    .domain([0, d3.max(countryData, d => d[dataType])])
+    .range([chartHeight, 0]);
 
-  d3.select(".y-axis")
-      .attr("transform", "translate(" + (padding.left - barWidth / 2) + ",0)")
-      .transition()
-      .duration(1000)
-      .call(yAxis);
+  // Calculate bar width
+  const barWidth = Math.min(
+    (chartWidth / countryData.length) * 0.8, 50);
 
-      
-  var axisLabel = dataType === "emissions" ?
+  // Update axes, chart width mod states the number of intervals for year axis labels
+  const xAxis = d3.axisBottom(xScale)
+    .tickFormat(d3.format(".0f"))
+    .ticks(Math.min(countryData.length, Math.floor(chartWidth / 50)));
+
+  const yAxis = d3.axisLeft(yScale)
+    .ticks(Math.min(10, Math.floor(chartHeight / 30)));
+
+  // Transform chart elements group
+  const chartGroup = bar.select(".bars-container")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  // Update axes positions with larger fonts
+  bar.select(".x-axis")
+    .attr("transform", `translate(${margin.left},${height - margin.bottom})`)
+    .call(xAxis)
+    .selectAll("text")
+    .style("font-size", `${Math.min(17, Math.max(13, width / 65))}px`);  // Increased by ~20%
+
+  bar.select(".y-axis")
+    .attr("transform", `translate(${margin.left},${margin.top})`)
+    .call(yAxis)
+    .selectAll("text")
+    .style("font-size", `${Math.min(17, Math.max(13, width / 65))}px`);  // Increased by ~20%
+
+  // Update labels
+  const axisLabel = dataType === "emissions" ?
     "CO2 emissions, thousand metric tons" :
     "CO2 emissions, metric tons per capita";
 
-  var barTitle = country ?
+  const barTitle = country ?
     "CO2 Emissions, " + country :
-    "Click on a country to see annual trends.";
+    "Click on a country to see annual trends";
 
-  d3.select(".y-axis-label")
-      .text(axisLabel);
+  // Update y-axis label with larger font
+  bar.select(".y-axis-label")
+    .attr("transform", `rotate(-90) translate(${-height/2},${margin.left/4})`)
+    .attr("dy", "2em")
+    .style("text-anchor", "middle")
+    // .style("font-size", `${Math.min(19, Math.max(14, width / 65))}px`)  
+    .style("font-size", `${axisLabelFontSize}px`)
+    .text(axisLabel);
 
-  d3.select(".bar-title")
-      .text(barTitle);
+  // Update title with larger font
+  bar.select(".bar-title")
+    .attr("x", width / 2)
+    .attr("y", margin.top / 2)
+    .style("text-anchor", "middle")
+    // .style("font-size", `${Math.min(26, Math.max(19, width / 45))}px`)  
+    .style("font-size", `${titleFontSize}px`)
+    .text(barTitle);
 
-  var t = d3.transition()
-            .duration(1000)
-            .ease(d3.easeBounceIn);
+  // Update bars
+  const t = d3.transition()
+    .duration(900)
+    .ease(d3.easeBounceIn);
 
-  var update = bar 
-                 .selectAll(".bar")
-                 .data(countryData);
+  const update = chartGroup
+    .selectAll(".bar")
+    .data(countryData);
 
-  update
-    .exit()
+  // Remove old bars
+  update.exit()
     .transition(t)
-      .delay((d, i, nodes) => (nodes.length - i - 1) * 100)
-      .attr("y", height - padding.bottom)
-      .attr("height", 0)
-      .remove();
+    .attr("y", chartHeight)
+    .attr("height", 0)
+    .remove();
 
-  update
-    .enter()
+  // Add new bars and update existing ones
+  update.enter()
     .append("rect")
-      .classed("bar", true)
-      .attr("y", height - padding.bottom)
-      .attr("height", 0)
+    .classed("bar", true)
+    .attr("y", chartHeight)
+    .attr("height", 0)
     .merge(update)
-      .attr("x", d => (xScale(d.year) + xScale(d.year - 1)) / 2)
-      .attr("width", barWidth - barPadding)
-      .transition(t)
-      .delay((d, i) => i * 100)
-        .attr("y", d => yScale(d[dataType]))
-        .attr("height", d => height - padding.bottom - yScale(d[dataType]));
+    .attr("x", d => xScale(d.year) - barWidth / 2)
+    .attr("width", barWidth)
+    .transition(t)
+    .attr("y", d => yScale(d[dataType]))
+    .attr("height", d => chartHeight - yScale(d[dataType]));
 }
 
+function responsivefyBar(svg) {
+  const container = d3.select(svg.node().parentNode);
+  const chartsContainer = d3.select('.charts-container');
+  
 
+  function resizeBar() {
+    // Get new dimensions
+    const targetWidth = parseInt(chartsContainer.style("width"));
+    const containerHeight = parseInt(chartsContainer.style("height"));
+    const targetHeight = containerHeight * 0.47;
 
+    // Update SVG dimensions
+    svg.attr("width", targetWidth)
+       .attr("height", targetHeight);
 
+    // Redraw chart with new dimensions
+    if (svg.node().__currentData.length > 0) {
+      updateBarChart(svg.node());
+    }
+  }
 
+  // Add debounced resize handler
+  let resizeTimeout;
+  const debouncedResize = () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(resizeBar, 250);
+  };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  // Initial resize
+  resizeBar();
+  
+  // Add resize listener
+  window.addEventListener('resize', debouncedResize);
+  
+  // Return remove listener function
+  return function() {
+    window.removeEventListener('resize', debouncedResize);
+    clearTimeout(resizeTimeout);
+  };
+}
 
