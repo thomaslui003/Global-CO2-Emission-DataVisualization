@@ -2,6 +2,9 @@
   font-family: 'Source Sans Pro', sans-serif;
 }
 
+html { 
+  overflow-y: hidden; /* Ensures vertical scrollbar is always visible */ 
+}
 body {
   margin: 0;
   background: #ecf0f1;

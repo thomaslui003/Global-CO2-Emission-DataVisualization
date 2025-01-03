@@ -220,7 +220,7 @@ function drawMap(geoData, climateData, year, dataType) {
     .scale(width/7.3) 
     .translate([
       width / 2,
-      height / 1.55
+      height / 1.5
     ]);
 
   //define map path
